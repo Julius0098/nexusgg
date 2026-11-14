@@ -93,8 +93,9 @@ if issues:
 print(f'Checked internal links and assets in {len(pages)} HTML files.')
 
 if args.seo:
-    origin = (os.getenv('NEXT_PUBLIC_SITE_URL') or '').strip().rstrip('/')
-    indexable = bool(origin) and os.getenv('NEXT_PUBLIC_NO_INDEX') != '1'
+    origin = (os.getenv('NEXT_PUBLIC_SITE_URL') or '').strip().rstrip('/') or 'https://nexusgg-8ia.pages.dev'
+    is_pages_preview = os.getenv('CF_PAGES') == '1' and os.getenv('CF_PAGES_BRANCH') != 'main'
+    indexable = not is_pages_preview and os.getenv('NEXT_PUBLIC_NO_INDEX') != '1'
     token = (os.getenv('NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION') or '').strip()
     canonical_urls = set()
     titles = set()

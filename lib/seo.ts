@@ -11,14 +11,17 @@ function configuredOrigin(value: string | undefined) {
   return url.origin;
 }
 
-export const siteUrl = configuredOrigin(process.env.NEXT_PUBLIC_SITE_URL);
-export const isIndexable = Boolean(siteUrl) && process.env.NEXT_PUBLIC_NO_INDEX !== '1';
+const productionOrigin = 'https://nexusgg-8ia.pages.dev';
+const isPagesPreview = process.env.CF_PAGES === '1' && process.env.CF_PAGES_BRANCH !== 'main';
+
+export const siteUrl = configuredOrigin(process.env.NEXT_PUBLIC_SITE_URL) ?? productionOrigin;
+export const isIndexable = !isPagesPreview && process.env.NEXT_PUBLIC_NO_INDEX !== '1';
 export const siteTitle = 'NEXUSGG';
 export const siteDescription = 'Use free gaming tools and calculators for 50 games. Convert CS2 and Valorant sensitivity, link Minecraft portals, and estimate Roblox costs.';
 const socialImage = { url: '/nexusgg-social.jpg', width: 1200, height: 630, alt: 'NEXUSGG gaming hub artwork' };
 
 export function absoluteUrl(path: string) {
-  return siteUrl ? new URL(path, siteUrl).href : undefined;
+  return new URL(path, siteUrl).href;
 }
 
 export function metadata(title: string, description: string, path: string, type: 'website' | 'article' = 'website'): Metadata {
@@ -27,9 +30,9 @@ export function metadata(title: string, description: string, path: string, type:
   return {
     title: { absolute: brandedTitle },
     description,
-    alternates: url ? { canonical: url } : undefined,
-    openGraph: { title: brandedTitle, description, siteName: siteTitle, type, url, locale: 'en_US', images: url ? [socialImage] : undefined },
-    twitter: { card: 'summary_large_image', title: brandedTitle, description, images: url ? [socialImage] : undefined },
+    alternates: { canonical: url },
+    openGraph: { title: brandedTitle, description, siteName: siteTitle, type, url, locale: 'en_US', images: [socialImage] },
+    twitter: { card: 'summary_large_image', title: brandedTitle, description, images: [socialImage] },
   };
 }
 

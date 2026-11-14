@@ -25,7 +25,7 @@ The production build writes the static website to `out/`.
 1. Push the extracted project to a GitHub repository.
 2. In **Workers & Pages**, select **Create application**, then **Pages** and import the repository.
 3. Select **Next.js (Static HTML Export)**. Set the build command to `npm run build`, output directory to `out`, and Node version to 22.18 or newer.
-4. Once your `pages.dev` hostname is assigned, set `NEXT_PUBLIC_SITE_URL` to its full HTTPS origin and redeploy. If you change domains later, update this setting and redeploy so canonicals and the sitemap match.
+4. The canonical origin defaults to `https://nexusgg-8ia.pages.dev`. If you move domains, set `NEXT_PUBLIC_SITE_URL` to the new HTTPS origin and redeploy so canonicals and the sitemap match.
 5. Optionally set `NEXT_PUBLIC_CONTACT_EMAIL` to the address you want to receive feedback at and redeploy. The Contact page opens an email draft on the visitor's device when an address is configured.
 
 [Cloudflare's Next.js static export guide](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/) explains the settings. The same source can be imported into Vercel as a Next.js project. Review the terms of your hosting plan before running ads.
@@ -36,7 +36,7 @@ The production build writes the static website to `out/`.
 2. Choose **HTML tag** verification. Set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` to the value inside the tag's `content` attribute and redeploy. Confirm the homepage renders the tag in its head, then click **Verify**. You can also use **HTML file** verification by putting the downloaded file in `public/` before deploying.
 3. Under **Sitemaps**, submit `sitemap.xml`. Use URL Inspection on the homepage and on key tool pages to check crawl access.
 
-Use a public deployment, set `NEXT_PUBLIC_SITE_URL` to its canonical HTTPS origin, and leave `NEXT_PUBLIC_NO_INDEX` unset. Set `NEXT_PUBLIC_NO_INDEX=1` when building a private deployment. Private builds send noindex metadata and omit URLs from the sitemap. A build without a configured origin also prevents indexing, even if the static files are served publicly.
+Use a public deployment from the Cloudflare Pages `main` branch and leave `NEXT_PUBLIC_NO_INDEX` unset there. Cloudflare branch previews and builds with `NEXT_PUBLIC_NO_INDEX=1` send noindex metadata and omit URLs from the sitemap.
 
 Run `python scripts/check-export.py --seo` after the build, with the same SEO environment variables, to check rendered metadata, links, and the sitemap.
 
